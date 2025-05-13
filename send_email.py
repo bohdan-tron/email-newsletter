@@ -6,7 +6,7 @@ def send_email(message):
   port = 465
   smtp_server = os.environ.get('SMTP_SERVER', 'smtp.gmail.com')
   sender_email = os.environ.get('SENDER_EMAIL')
-  receiver_email = os.environ.get('RECEIVER_EMAIL', 'Return.ginger@gmail.com')
+  receiver_email = os.environ.get('RECEIVER_EMAIL')
   password = os.environ.get('EMAIL_PASSWORD')
   context = ssl.create_default_context()
   
