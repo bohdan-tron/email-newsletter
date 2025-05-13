@@ -1,6 +1,8 @@
 import requests
+from datetime import datetime
 import os
 from dotenv import load_dotenv
+from send_email import send_email
 
 load_dotenv(dotenv_path="envs/.env")
 
@@ -12,6 +14,18 @@ url = f"https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey
 r = requests.get(url)
 data = r.json()
 
+news_mail = []
+
 for article in data['articles']:
-  post = (article['title'], article['url'], article['publishedAt'])
-  print(post)
+   # Parse the published date
+  published_date = datetime.strptime(article['publishedAt'], "%Y-%m-%dT%H:%M:%SZ")
+  # Format date as DD Mon YY
+  formatted_date = published_date.strftime("%d %b %y")
+  
+  formatted_post = f'{article["url"]} {article["title"]}, {formatted_date}' + '\n' + f'{article["description"]}' + 2 * '\n'
+  news_mail.append(formatted_post)
+  
+news_mail = ''.join(news_mail)
+news_mail = news_mail.encode('utf-8')
+print('mail sent')
+send_email(news_mail)
